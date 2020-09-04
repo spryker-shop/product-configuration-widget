@@ -14,11 +14,13 @@ use Spryker\Yves\Kernel\Widget\AbstractWidget;
  * @method \SprykerShop\Yves\ProductConfigurationWidget\ProductConfigurationWidgetFactory getFactory()
  * @method \SprykerShop\Yves\ProductConfigurationWidget\ProductConfigurationWidgetConfig getConfig()
  */
-class ProductConfiguratorProductViewDisplayWidget extends AbstractWidget
+class ProductConfigurationProductDetailPageButtonWidget extends AbstractWidget
 {
     protected const PARAMETER_IS_VISIBLE = 'isVisible';
-    protected const PARAMETER_PRODUCT_CONFIGURATION_INSTANCE = 'productConfigurationInstance';
-    protected const PARAMETER_PRODUCT_CONFIGURATION_TEMPLATE = 'productConfigurationTemplate';
+    protected const PARAMETER_FORM = 'form';
+    protected const PARAMETER_PRODUCT_CONFIGURATION_ROUTE_NAME = 'productConfigurationRouteName';
+    protected const PARAMETER_SKU = 'sku';
+    protected const PARAMETER_SOURCE_TYPE = 'sourceType';
 
     /**
      * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
@@ -31,8 +33,8 @@ class ProductConfiguratorProductViewDisplayWidget extends AbstractWidget
             return;
         }
 
-        $this->addProductConfigurationInstanceParameter($productViewTransfer);
-        $this->addProductConfigurationTemplateParameter($productViewTransfer);
+        $this->addFormParameter($productViewTransfer);
+        $this->addProductConfigurationRouteNameParameter();
     }
 
     /**
@@ -40,7 +42,7 @@ class ProductConfiguratorProductViewDisplayWidget extends AbstractWidget
      */
     public static function getName(): string
     {
-        return 'ProductConfiguratorProductViewDisplayWidget';
+        return 'ProductConfigurationProductDetailPageButtonWidget';
     }
 
     /**
@@ -48,7 +50,7 @@ class ProductConfiguratorProductViewDisplayWidget extends AbstractWidget
      */
     public static function getTemplate(): string
     {
-        return '@ProductConfigurationWidget/views/product-configurator-product-view-display-widget/product-configurator-product-view-display-widget.twig';
+        return '@ProductConfigurationWidget/views/product-configuration-product-detail-page-button-widget/product-configuration-product-detail-page-button-widget.twig';
     }
 
     /**
@@ -58,7 +60,7 @@ class ProductConfiguratorProductViewDisplayWidget extends AbstractWidget
      */
     protected function addIsVisibleParameter(ProductViewTransfer $productViewTransfer): void
     {
-        $this->addParameter(static::PARAMETER_IS_VISIBLE, $productViewTransfer->getProductConfigurationInstance());
+        $this->addParameter(static::PARAMETER_IS_VISIBLE, (bool)$productViewTransfer->getProductConfigurationInstance());
     }
 
     /**
@@ -66,22 +68,27 @@ class ProductConfiguratorProductViewDisplayWidget extends AbstractWidget
      *
      * @return void
      */
-    protected function addProductConfigurationInstanceParameter(ProductViewTransfer $productViewTransfer): void
+    protected function addFormParameter(ProductViewTransfer $productViewTransfer): void
     {
-        $this->addParameter(static::PARAMETER_PRODUCT_CONFIGURATION_INSTANCE, $productViewTransfer->getProductConfigurationInstance());
+        $this->addParameter(
+            static::PARAMETER_FORM,
+            $this->getFactory()->getProductConfigurationButtonForm()->setData(
+                [
+                    static::PARAMETER_SOURCE_TYPE => $this->getConfig()->getPdpSourceType(),
+                    static::PARAMETER_SKU => $productViewTransfer->getSku(),
+                ]
+            )->createView()
+        );
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     *
      * @return void
      */
-    protected function addProductConfigurationTemplateParameter(ProductViewTransfer $productViewTransfer): void
+    protected function addProductConfigurationRouteNameParameter(): void
     {
-        $productConfigurationTemplateTransfer = $this->getFactory()
-            ->createProductConfigurationTemplateResolver()
-            ->resolveProductConfigurationTemplate($productViewTransfer->getProductConfigurationInstance());
-
-        $this->addParameter(static::PARAMETER_PRODUCT_CONFIGURATION_TEMPLATE, $productConfigurationTemplateTransfer);
+        $this->addParameter(
+            static::PARAMETER_PRODUCT_CONFIGURATION_ROUTE_NAME,
+            $this->getConfig()->getProductConfigurationGatewayRequestRoute()
+        );
     }
 }

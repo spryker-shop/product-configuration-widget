@@ -14,7 +14,7 @@ use Spryker\Yves\Kernel\Widget\AbstractWidget;
  * @method \SprykerShop\Yves\ProductConfigurationWidget\ProductConfigurationWidgetFactory getFactory()
  * @method \SprykerShop\Yves\ProductConfigurationWidget\ProductConfigurationWidgetConfig getConfig()
  */
-class ProductConfiguratorCartPageButtonWidget extends AbstractWidget
+class ProductConfigurationCartPageButtonWidget extends AbstractWidget
 {
     protected const PARAMETER_IS_VISIBLE = 'isVisible';
     protected const PARAMETER_FORM = 'form';
@@ -34,11 +34,8 @@ class ProductConfiguratorCartPageButtonWidget extends AbstractWidget
             return;
         }
 
-        $this->addFormParameter();
+        $this->addFormParameter($itemTransfer);
         $this->addProductConfigurationRouteNameParameter();
-        $this->addSourceTypeParameter();
-        $this->addItemGroupKeyParameter($itemTransfer);
-        $this->addQuantityParameter($itemTransfer);
     }
 
     /**
@@ -46,7 +43,7 @@ class ProductConfiguratorCartPageButtonWidget extends AbstractWidget
      */
     public static function getName(): string
     {
-        return 'ProductConfiguratorCartPageButtonWidget';
+        return 'ProductConfigurationCartPageButtonWidget';
     }
 
     /**
@@ -54,7 +51,7 @@ class ProductConfiguratorCartPageButtonWidget extends AbstractWidget
      */
     public static function getTemplate(): string
     {
-        return '@ProductConfigurationWidget/views/product-configurator-cart-page-button-widget/product-configurator-cart-page-button-widget.twig';
+        return '@ProductConfigurationWidget/views/product-configuration-cart-page-button-widget/product-configuration-cart-page-button-widget.twig';
     }
 
     /**
@@ -64,15 +61,24 @@ class ProductConfiguratorCartPageButtonWidget extends AbstractWidget
      */
     protected function addIsVisibleParameter(ItemTransfer $itemTransfer): void
     {
-        $this->addParameter(static::PARAMETER_IS_VISIBLE, $itemTransfer->getProductConfigurationInstance());
+        $this->addParameter(static::PARAMETER_IS_VISIBLE, (bool)$itemTransfer->getProductConfigurationInstance());
     }
 
     /**
+     * @param \Generated\Shared\Transfer\ItemTransfer $itemTransfer
+     *
      * @return void
      */
-    protected function addFormParameter(): void
+    protected function addFormParameter(ItemTransfer $itemTransfer): void
     {
-        $this->addParameter(static::PARAMETER_FORM, $this->getFactory()->getProductConfigurationButtonForm()->createView());
+        $this->addParameter(static::PARAMETER_FORM, $this->getFactory()->getProductConfigurationButtonForm()
+            ->setData(
+                [
+                    static::PARAMETER_SOURCE_TYPE => $this->getConfig()->getCartSourceType(),
+                    static::PARAMETER_ITEM_GROUP_KEY => $itemTransfer->getGroupKey(),
+                    static::PARAMETER_QUANTITY => $itemTransfer->getQuantity(),
+                ]
+            )->createView());
     }
 
     /**
@@ -84,33 +90,5 @@ class ProductConfiguratorCartPageButtonWidget extends AbstractWidget
             static::PARAMETER_PRODUCT_CONFIGURATION_ROUTE_NAME,
             $this->getConfig()->getProductConfigurationGatewayRequestRoute()
         );
-    }
-
-    /**
-     * @return void
-     */
-    protected function addSourceTypeParameter(): void
-    {
-        $this->addParameter(static::PARAMETER_SOURCE_TYPE, $this->getConfig()->getCartSourceType());
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\ItemTransfer $itemTransfer
-     *
-     * @return void
-     */
-    protected function addItemGroupKeyParameter(ItemTransfer $itemTransfer): void
-    {
-        $this->addParameter(static::PARAMETER_ITEM_GROUP_KEY, $itemTransfer->getGroupKey());
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\ItemTransfer $itemTransfer
-     *
-     * @return void
-     */
-    protected function addQuantityParameter(ItemTransfer $itemTransfer): void
-    {
-        $this->addParameter(static::PARAMETER_QUANTITY, $itemTransfer->getQuantity());
     }
 }

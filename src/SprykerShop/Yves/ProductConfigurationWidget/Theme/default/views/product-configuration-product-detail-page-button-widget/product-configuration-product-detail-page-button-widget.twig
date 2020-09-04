@@ -5,19 +5,14 @@
     form: _widget.form | default,
     productConfigurationRouteName: _widget.productConfigurationRouteName | default,
     sourceType: _widget.sourceType | default,
-    itemGroupKey: _widget.itemGroupKey | default,
-    quantity: _widget.quantity | default,
+    sku: _widget.sku | default
 } %}
 
 {% block body %}
     {% if data.isVisible %}
 
         {% block formContent %}
-            {{ form_start(data.form, {'action': path(data.productConfigurationRouteName, {
-                'source-type': data.sourceType,
-                'item-group-key': data.itemGroupKey,
-                'quantity': data.quantity
-            })}) }}
+            {{ form_start(data.form, {'action': path(data.productConfigurationRouteName)} ) }}
 
             <button class="button">{{ 'product_configuration_widget.configure' | trans }}</button>
 
