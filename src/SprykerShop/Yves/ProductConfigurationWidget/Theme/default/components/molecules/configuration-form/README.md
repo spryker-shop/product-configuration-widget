@@ -1,1 +1,1 @@
-Displays configure form with button.
+Displays configuration form with button.
