@@ -18,19 +18,11 @@ class ProductConfiguratorButtonFormDataProvider
      */
     protected $config;
 
-    /**
-     * @param \SprykerShop\Yves\ProductConfigurationWidget\ProductConfigurationWidgetConfig $config
-     */
     public function __construct(ProductConfigurationWidgetConfig $config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     *
-     * @return \Generated\Shared\Transfer\ProductConfiguratorRequestDataTransfer
-     */
     public function getData(ProductViewTransfer $productViewTransfer): ProductConfiguratorRequestDataTransfer
     {
         return (new ProductConfiguratorRequestDataTransfer())

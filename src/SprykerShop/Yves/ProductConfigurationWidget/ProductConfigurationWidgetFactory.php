@@ -21,9 +21,6 @@ use Symfony\Component\Form\FormInterface;
  */
 class ProductConfigurationWidgetFactory extends AbstractFactory
 {
-    /**
-     * @return \SprykerShop\Yves\ProductConfigurationWidget\Resolver\ProductConfigurationTemplateResolverInterface
-     */
     public function createProductConfigurationTemplateResolver(): ProductConfigurationTemplateResolverInterface
     {
         return new ProductConfigurationTemplateResolver(
@@ -31,9 +28,6 @@ class ProductConfigurationWidgetFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Symfony\Component\Form\FormInterface
-     */
     public function getProductConfigurationButtonForm(): FormInterface
     {
         return $this->getFormFactory()->createNamed(
@@ -42,17 +36,11 @@ class ProductConfigurationWidgetFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerShop\Yves\ProductConfigurationWidget\Form\DataProvider\ProductConfiguratorButtonFormDataProvider
-     */
     public function createProductConfiguratorButtonFormDataProvider(): ProductConfiguratorButtonFormDataProvider
     {
         return new ProductConfiguratorButtonFormDataProvider($this->getConfig());
     }
 
-    /**
-     * @return \Symfony\Component\Form\FormFactoryInterface
-     */
     public function getFormFactory(): FormFactoryInterface
     {
         return $this->getProvidedDependency(ApplicationConstants::FORM_FACTORY);

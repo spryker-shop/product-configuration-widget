@@ -31,9 +31,6 @@ class ProductConfigurationProductDetailPageButtonWidget extends AbstractWidget
      */
     protected const PARAMETER_PRODUCT_CONFIGURATOR_ROUTE_NAME = 'productConfiguratorRouteName';
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     */
     public function __construct(ProductViewTransfer $productViewTransfer)
     {
         $this->addIsVisibleParameter($productViewTransfer);
@@ -46,37 +43,21 @@ class ProductConfigurationProductDetailPageButtonWidget extends AbstractWidget
         $this->addProductConfigurationRouteNameParameter();
     }
 
-    /**
-     * @return string
-     */
     public static function getName(): string
     {
         return 'ProductConfigurationProductDetailPageButtonWidget';
     }
 
-    /**
-     * @return string
-     */
     public static function getTemplate(): string
     {
         return '@ProductConfigurationWidget/views/product-detail-configuration-button/product-detail-configuration-button.twig';
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     *
-     * @return void
-     */
     protected function addIsVisibleParameter(ProductViewTransfer $productViewTransfer): void
     {
         $this->addParameter(static::PARAMETER_IS_VISIBLE, $productViewTransfer->getProductConfigurationInstance() !== null);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     *
-     * @return void
-     */
     protected function addFormParameter(ProductViewTransfer $productViewTransfer): void
     {
         $productConfiguratorButtonFormCartPageDataProvider = $this->getFactory()
@@ -90,9 +71,6 @@ class ProductConfigurationProductDetailPageButtonWidget extends AbstractWidget
         $this->addParameter(static::PARAMETER_FORM, $productConfigurationButtonForm);
     }
 
-    /**
-     * @return void
-     */
     protected function addProductConfigurationRouteNameParameter(): void
     {
         $this->addParameter(

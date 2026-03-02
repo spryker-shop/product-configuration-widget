@@ -31,9 +31,6 @@ class ProductConfigurationProductViewDisplayWidget extends AbstractWidget
      */
     protected const PARAMETER_PRODUCT_CONFIGURATION_TEMPLATE = 'productConfigurationTemplate';
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     */
     public function __construct(ProductViewTransfer $productViewTransfer)
     {
         $this->addIsVisibleParameter($productViewTransfer);
@@ -46,47 +43,26 @@ class ProductConfigurationProductViewDisplayWidget extends AbstractWidget
         $this->addProductConfigurationTemplateParameter($productViewTransfer);
     }
 
-    /**
-     * @return string
-     */
     public static function getName(): string
     {
         return 'ProductConfigurationProductViewDisplayWidget';
     }
 
-    /**
-     * @return string
-     */
     public static function getTemplate(): string
     {
         return '@ProductConfigurationWidget/views/product-detail-configuration/product-detail-configuration.twig';
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     *
-     * @return void
-     */
     protected function addIsVisibleParameter(ProductViewTransfer $productViewTransfer): void
     {
         $this->addParameter(static::PARAMETER_IS_VISIBLE, $productViewTransfer->getProductConfigurationInstance() !== null);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     *
-     * @return void
-     */
     protected function addProductConfigurationInstanceParameter(ProductViewTransfer $productViewTransfer): void
     {
         $this->addParameter(static::PARAMETER_PRODUCT_CONFIGURATION_INSTANCE, $productViewTransfer->getProductConfigurationInstanceOrFail());
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     *
-     * @return void
-     */
     protected function addProductConfigurationTemplateParameter(ProductViewTransfer $productViewTransfer): void
     {
         $productConfigurationTemplateTransfer = $this->getFactory()
